@@ -1,0 +1,294 @@
+\documentclass[10pt,twocolumn]{article}
+
+% use the oxycomps style file
+\usepackage{oxycomps}
+
+% usage: \fixme[comments describing issue]{text to be fixed}
+% define \fixme as not doing anything special
+\newcommand{\fixme}[2][]{#2}
+% overwrite it so it shows up as red
+\renewcommand{\fixme}[2][]{\textcolor{red}{#2}}
+% overwrite it again so related text shows as footnotes
+%\renewcommand{\fixme}[2][]{\textcolor{red}{#2\footnote{#1}}}
+
+% read references.bib for the bibtex data
+\bibliography{references}
+
+% include metadata in the generated pdf file
+\pdfinfo{
+    /Title (Git and LaTeX Worksheet)
+    /Author (Justin Li)
+}
+
+% set the title and author information
+\title{Git and \LaTeX Worksheet}
+\author{Justin Li}
+\affiliation{Occidental College}
+\email{justinnhli@oxy.edu}
+
+\begin{document}
+
+\maketitle
+
+\section{Instructions}
+
+This worksheet is due March 1, 2025 at midnight, to be submitted as a GitHub repository URL to Canvas. The repository should contain all files requires to compile this worksheet with your answers. You should only change this \texttt{document.tex} file and the  \texttt{references.bib} file; do not change any other file in this starting repository. You should not use any additional packages, and are not allowed to use the \texttt{{\textbackslash}usepackage\{\}} command. Additionally, the output should be formatted correctly: your answers should be appropriately nested under the questions, command-line commands should be in monospace, and images should be positioned appropriately.
+
+\section{Git Questions}
+
+\subsection{General questions}
+
+\begin{enumerate}
+    \item What is a version control system? Why are they useful?
+    \begin{itemize}
+        \item A version control system is a tool that helps manage changes to source code over time.
+        \item They are incredibly important because they can allow developers to collaborate with one another, track the changes that are made, and revert to a previous version if need be.
+    \end{itemize}
+    \item What is the difference between git and GitHub?
+    \begin{itemize}
+        \item Git is the system that keeps record of your project history, while GitHub is an online  platform that hosts Git repositories and allows for ease of collaboration.
+    \end{itemize}
+    \item What is a repository?
+    \begin{itemize}
+        \item A repository can be thought as a type of online storage, where one can host their work to be easily seen by other developers.
+    \end{itemize}
+    \item What is a commit?
+    \begin{itemize}
+        \item A Git commit is essentially a snapshot of your project at a specific point in time. When you make a commit, Git saves the current state of your project, and assigns a unique identifier to the snapshot. These are often accompanied by a "commit comment", to serve as a reminder of what was changed.
+    \end{itemize}
+    \item What is the commit graph?
+    \begin{itemize}
+        \item A commit graph is a diagram that showcases how Git represents all of your data. Each node within the graph represents a commit, with furthest to the left being the oldest (or bottom if done vertically).
+    \end{itemize}
+    \item What is your preferred local git client (eg., command line, GitHub Desktop, GitKraken, etc.)?
+    \begin{itemize}
+        \item I have used GitBash within VSCode throughout my time taking CS courses, and I have had little problems with it. I have seen others use GitHub Desktop with success, though, so I am sure there is no wrong answer here.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Local Usage}
+
+\begin{enumerate}
+\item What is the difference between adding a file to the staging area and committing a file?
+\begin{itemize}
+    \item Adding a file to the staging area is like putting items in a shopping cart; one is picking the files they want to commit, but haven't saved them yet. Committing a file is more like buying the items in your cart; those are permanently saved into your Git project history.
+\end{itemize}
+\item What is a commit message, and why is it important for them to be meaningful?
+\begin{itemize}
+    \item A commit message is a text message that accompanies commits. They are incredibly useful as it allows the developer (especially the other members on their team) to quickly see what changes were made and why. This is particularly useful when trying to debug.
+\end{itemize}
+\item Starting with an empty repository, what sequence of commands/actions would result in the following commit graph? You may give a sequence of \texttt{git} commands, or describe (with screenshots) how you would do this in your preferred graphical git interface.
+\begin{verbatim}
+A---B---C---D
+\end{verbatim}
+\begin{itemize}
+    \item Initialize the repository:
+    \begin{verbatim}
+    git init
+    \end{verbatim}
+\begin{verbatim}
+    git commit -m A
+\end{verbatim}
+\begin{verbatim}
+    git commit -m B
+\end{verbatim}
+\begin{verbatim}
+    git commit -m C
+\end{verbatim}
+\begin{verbatim}
+    git commit -m D
+\end{verbatim}
+\begin{itemize}
+    \item A marking the first commit, D marking the latest commit.
+\end{itemize}
+\item If you are currently at commit D above, how would you recover code from commit B? What sequence of commands/actions would let you do so? You may give a sequence of \texttt{git} command-line commands, or describe (with screenshots) how you would do this in your preferred graphical git interface. Assume the commit hashes are AAAAAA..., BBBBBB..., etc.
+\begin{itemize}
+    \item If one wanted to restore a file from commit B but stay at commit D:
+\end{itemize}
+\begin{verbatim}
+    git restore --source=BBBBB
+    -- <filename>
+\end{verbatim}
+
+\item Imagine you created a git repository for your project, but only commit your changes once a week on Sundays. You got your code working on Tuesday, but then broke your code on Friday. What can you do to get the working version of your code back?
+\begin{itemize}
+    \item If one wanted to permanently go back to Tuesday's working code (and doesn't mind losing Wednesday, Thursday, and Friday's code in the process), one could type: 
+\end{itemize}
+\begin{verbatim}
+    git reset --hard BBBBB
+\end{verbatim}
+\end{enumerate}
+
+\subsection{Branching and Merging}
+
+\begin{enumerate}
+\item What is a branch? Why are they useful?
+\begin{itemize}
+    \item Branches are tools that allow one to develop features, fix bugs, and safely experiment with new ideas in a contained area of one's repository. These are incredibly helpful, as they allow one to isolate different works without affecting other branches within the repository.
+\end{itemize}
+\item Starting with an empty repository, what sequence of commands/actions would result in the following commit graph? You may give a sequence of \texttt{git} command-line commands, or describe (with screenshots) how you would do this in your preferred graphical git interface.
+\begin{verbatim}
+A---B---C---D
+     \
+      E---F
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "A"
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "B"
+\end{verbatim}
+\begin{verbatim}
+git branch feature-branch 
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "C"
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "D"
+\end{verbatim}
+\begin{verbatim}
+git switch feature-branch
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "E"
+\end{verbatim}
+\begin{verbatim}
+git add file.txt
+git commit -m "F"
+\end{verbatim}
+\item Why is a merge? Why are they useful?
+\begin{itemize}
+    \item A merge is the process of combining changes from one branch into another. This is useful as they let you combine changes from different branches into one final version.
+\end{itemize}
+\item Imagine you are currently at commit D above. What sequence of commands/actions would result in the following commit graph? You may give a sequence of \texttt{git} commands, or describe (with screenshots) how you would do this in your preferred graphical git interface.
+\begin{verbatim}
+A---B---C---D---G
+     \         /
+      E---F---/
+\end{verbatim}
+\begin{verbatim}
+git switch main
+\end{verbatim}
+\begin{verbatim}
+git merge feature-branch
+\end{verbatim}
+\item What is a merge conflict? When do they occur?
+\begin{itemize}
+    \item A merge conflict occurs when two branches in a version control system have changes to the same part of a file, preventing what otherwise would have been an automatic merge. Common examples include: two developers edit the same line of a file in seperate branches, one branch deletes a file that another branch modifies, or one branch renames a file while another branch edits its contents.
+\end{itemize}
+\item Starting with an empty repository, despite a sequence of commands/actions that would result in a merge conflict. Include the exact edits and \texttt{git} commands or screenshots of the graphical git interface. Include the output or screenshot that shows the resulting merge conflict.
+\end{enumerate}
+
+\begin{verbatim}
+echo "Hello, World!" > file.txt
+git add file.txt
+git commit -m "Initial commit"
+\end{verbatim}
+\begin{verbatim}
+git branch feature
+git switch feature
+\end{verbatim}
+\begin{verbatim}
+echo "This is a feature branch change."
+> file.txt
+git add file.txt
+git commit -m 
+"Modify file.txt in feature branch"
+\end{verbatim}
+\begin{verbatim}
+git switch main
+echo "This is a main branch change."
+> file.txt
+git add file.txt
+git commit -m 
+"Modify file.txt in main branch"
+\end{verbatim}
+\begin{verbatim}
+git merge feature
+\end{verbatim}
+\begin{itemize}
+    \item Git should report an error here:
+\end{itemize}
+\begin{verbatim}
+Auto-merging file.txt
+CONFLICT (content): 
+Merge conflict in file.txt
+Automatic merge failed;
+fix conflicts and then commit the result.
+\end{verbatim}
+
+\subsection{Remotes}
+
+\begin{enumerate}
+\item What is a remote?
+\begin{itemize}
+    \item A remote is a common repository that all team members utilize to share their respected changes. GitHub is a commonly used example of a remote repository.
+\end{itemize}
+\item What does pushing and pulling do?
+\begin{itemize}
+    \item Pushing: Uploads a user's code into the remote repository.
+\end{itemize}
+\begin{itemize}
+   \item Pulling: Grabs the latest changes from the remote repository into an existing repository onto one's machine.
+   \end{itemize}
+\item Imagine you created a git repository for your project on your laptop and commit regularly, but only push your code to GitHub once a week on Sundays. Your laptop caught on fire on Friday. What can you do to get your code back?
+\begin{itemize}
+    \item The only code that would be recoverable in that scenario would be from the last push on Sunday prior to the fire. Poor laptop :(
+\end{itemize}
+\end{enumerate}
+
+\section{\LaTeX}
+
+Find a source of each of the following types and add it to \texttt{references.bib}, with the appropriate data. Your sources do not have to relate to your project. Looking at \textcite{OverleafBibliographyManagement} and \textcite{WikipediaBibtex} may be helpful,
+
+\begin{itemize}
+\item a journal article
+\item a conference article
+\item a PhD or Master's thesis
+\item an article in an edited popular media venue (newspaper, magazine, etc.)
+\item a book
+\item a chapter of a book
+\item a YouTube video
+\item a piece of technical documentation (e.g., a programming language reference, and API documentation, etc.)
+\end{itemize}
+
+Additionally, in you own words, explain the difference between \texttt{{\textbackslash}cite\{\}} and \texttt{{\textbackslash}textcite\{\}}. When should they each be used? Demonstrate your answers by using one of them with each of your references from above.
+
+Additionally, in your own words, explain the difference between 
+\texttt{{\textbackslash}cite\{\}} and \texttt{{\textbackslash}textcite\{\}}. 
+When should they each be used? Demonstrate your answers by using one of them 
+with each of your references from above.
+
+\begin{itemize}
+
+
+The \texttt{\textbackslash cite\{\}} command is used when you want to add a reference at the end of a sentence, 
+like this: \cite{journalArticle}. The \texttt{\textbackslash textcite\{\}} command includes the author's name in 
+the sentence, making it flow more naturally, like \textcite{conferenceArticle}. 
+
+For example, \textcite{conferenceArticle} discusses the impact of screen time on children, 
+while \cite{journalArticle} explains its effects on health. \textcite{phdThesis} explores 
+how screen time influences youth with ASD, and \cite{newspaperArticle} reports on a study linking 
+screen time to developmental delays in babies. Books like \cite{bookSource} provide strategies to 
+reduce screen time, while \textcite{bookChapter} looks at how media affects young children. 
+
+Even online resources contribute to the discussion. \cite{youtubeVideo} is a video on quitting phone 
+addiction, and \textcite{technicalDoc} serves as a technical reference for web development.
+
+\end{itemize}
+
+
+
+\nocite{journalArticle, conferenceArticle, phdThesis, newspaperArticle, 
+bookSource, bookChapter, youtubeVideo, technicalDoc}
+
+\printbibliography
+
+
+\end{document}
